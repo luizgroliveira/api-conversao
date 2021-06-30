@@ -1,21 +1,21 @@
 {
   "name": "api-conversao",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "API de Conversão Celcius para Fahrenheit",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/KubeDev/api-conversao.git"
+    "url": "git+https://github.com/luizgroliveira/api-conversao.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/KubeDev/api-conversao/issues"
+    "url": "https://github.com/luizgroliveira/api-conversao/issues"
   },
-  "homepage": "https://github.com/KubeDev/api-conversao#readme",
+  "homepage": "https://github.com/luizgroliveira/api-conversao#readme",
   "dependencies": {
     "express": "^4.17.1",
     "nodehog": "^0.1.2",
