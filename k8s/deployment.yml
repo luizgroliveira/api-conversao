@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: api-conversao
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: api-conversao
@@ -12,10 +13,36 @@ spec:
         app: api-conversao
     spec:
       containers:
-      - name: api-conversao
-        image: lgro1991/api-conversao:v2
-        ports:
-        - containerPort: 8080
+        - name: api-conversao
+          image: lgro1991/api-conversao:v1
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 2
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 1
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 2
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 1
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "32Mi"
+            limits:
+              cpu: "400m"
+              memory: "64Mi"
+
 ---
 apiVersion: v1
 kind: Service
@@ -25,7 +52,21 @@ spec:
   selector:
     app: api-conversao
   ports:
-  - port: 80
-    targetPort: 8080
-    nodePort: 30000
-  type: NodePort
+    - port: 80
+      targetPort: 8080
+      #nodePort: 30000
+  #type: NodePort
+  type: LoadBalancer
+
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: api-hpa
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    name: api-conversao
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 60
